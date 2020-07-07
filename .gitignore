@@ -1,0 +1,3 @@
+openssl_cert.*
+secure_cert.*
+secure_domain.conf

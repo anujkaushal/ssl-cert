@@ -1,0 +1,29 @@
+# SSLCompression Off
+SSLHonorCipherOrder On
+SSLProtocol all -SSLv2 -SSLv3 -TLSv1 -TLSv1.1
+SSLCipherSuite ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES256-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256
+SSLOptions +StrictRequire
+ServerName DOMAIN
+
+<VirtualHost *:443>
+    ServerAdmin webmaster@localhost
+    DocumentRoot /usr/local/apache2/htdocs/
+    ErrorLog /usr/local/apache2/logs/error-ssl.log
+    CustomLog /usr/local/apache2/logs/access-ssl.log combined
+
+    SSLEngine on
+
+    SSLCertificateFile      PRESENTDIR/secure_cert.crt
+    SSLCertificateKeyFile   PRESENTDIR/secure_cert.key
+
+    <FilesMatch "\.(cgi|shtml|phtml|php)$">
+        SSLOptions +StdEnvVars
+    </FilesMatch>
+    <Directory /usr/lib/cgi-bin>
+        SSLOptions +StdEnvVars
+    </Directory>
+
+    <IfModule mod_headers.c>
+        Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    </IfModule>
+</VirtualHost>
